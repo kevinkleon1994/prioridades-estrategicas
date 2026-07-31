@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf5f7">
+  <title>Ênfases Estratégicas | Distrito Castelo de Sonhos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="viewport">
+    <div id="stage">
+      <aside class="sidebar">
+        <div class="brand-mark" aria-label="Ênfases Estratégicas">
+          <span class="shape identity"></span>
+          <span class="shape leadership"></span>
+          <span class="shape generations"></span>
+          <span class="shape discipleship"></span>
+        </div>
+
+        <nav class="area-menu" aria-label="Áreas estratégicas">
+          <button class="area-pill active" data-area="Identidade" style="--area:#ff0046">
+            <span class="menu-icon circle"></span>
+            <span class="menu-label">Identidade</span>
+          </button>
+          <button class="area-pill" data-area="Liderança" style="--area:#00bddd">
+            <span class="menu-icon triangle"></span>
+            <span class="menu-label">Liderança</span>
+          </button>
+          <button class="area-pill" data-area="Novas Gerações" style="--area:#ffb800">
+            <span class="menu-icon half"></span>
+            <span class="menu-label">Novas Gerações</span>
+          </button>
+          <button class="area-pill" data-area="Discipulado" style="--area:#00c97b">
+            <span class="menu-icon square"></span>
+            <span class="menu-label">Discipulado</span>
+          </button>
+        </nav>
+
+        <div class="church-mark">
+          <div class="flame">◒</div>
+          <small>Igreja Adventista<br>do Sétimo Dia</small>
+        </div>
+      </aside>
+
+      <main class="dashboard">
+        <section class="dashboard-head">
+          <div>
+            <p class="crumb">DIVISÃO SUL-AMERICANA · UNIÃO NORTE BRASILEIRA · MISSÃO OESTE DO PARÁ</p>
+            <h1>Distrito: Castelo de Sonhos</h1>
+            <p class="subtitle">Painel das Ênfases Estratégicas — Planejamento e acompanhamento das igrejas</p>
+          </div>
+
+          <div class="head-actions">
+            <div class="filter-box">
+              <label>Igreja</label>
+              <select id="churchFilter"></select>
+            </div>
+            <div class="filter-box small">
+              <label>Ano</label>
+              <select id="yearFilter">
+                <option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option>
+              </select>
+            </div>
+            <button id="settingsButton" class="refresh-button settings-button">⚙ Google Sheet</button>
+            <button id="refreshButton" class="refresh-button">
+              <span id="refreshIcon">↻</span> Atualizar visuais
+            </button>
+          </div>
+        </section>
+
+        <section class="board">
+          <div id="overviewView" class="workspace-view active">
+            <div class="summary-strip">
+              <div class="summary-copy">
+                <span class="summary-kicker">VISÃO GERAL</span>
+                <strong id="summaryTitle">Desempenho consolidado</strong>
+                <small id="summaryMeta">Todas as áreas estratégicas</small>
+              </div>
+              <div class="summary-gauge">
+                <div class="gauge-ring" id="overallGauge" style="--value:0">
+                  <div>
+                    <b id="overallPercent">0%</b>
+                    <span>alcançado</span>
+                  </div>
+                </div>
+              </div>
+              <div class="summary-stat">
+                <span>Meta cadastrada</span>
+                <b id="goalTotal">0</b>
+              </div>
+              <div class="summary-stat">
+                <span>Realizado</span>
+                <b id="reachedTotal">0</b>
+              </div>
+              <div class="summary-stat">
+                <span>Requisitos</span>
+                <b id="requirementTotal">0</b>
+              </div>
+            </div>
+
+            <div id="cardsGrid" class="cards-grid"></div>
+          </div>
+
+          <div id="detailView" class="workspace-view">
+            <div class="detail-tabs" id="detailTabs"></div>
+
+            <div class="detail-upper">
+              <aside class="detail-summary-card">
+                <div class="detail-summary-icon" id="detailSummaryIcon"></div>
+                <p class="detail-eyebrow">PRIORIDADE ESTRATÉGICA</p>
+                <h2 id="detailAreaTitle">Identidade</h2>
+                <p id="detailAreaDescription"></p>
+
+                <div class="detail-big-number" id="detailAreaPercent">0%</div>
+                <div class="detail-total-progress">
+                  <span id="detailAreaProgress"></span>
+                </div>
+
+                <div class="detail-summary-stats">
+                  <div><span>Meta</span><strong id="detailAreaGoal">0</strong></div>
+                  <div><span>Realizado</span><strong id="detailAreaReached">0</strong></div>
+                  <div><span>Critérios</span><strong id="detailAreaCount">0</strong></div>
+                </div>
+
+                <button id="backToOverview" class="back-overview">← Voltar à visão geral</button>
+              </aside>
+
+              <section class="criteria-panel">
+                <div class="criteria-head">
+                  <div>
+                    <p class="detail-eyebrow">CRITÉRIOS DE AVALIAÇÃO</p>
+                    <h3>Itens do planejamento</h3>
+                  </div>
+                  <div class="criteria-filter">
+                    <label for="statusFilter">Situação</label>
+                    <select id="statusFilter">
+                      <option value="Todos">Todos</option>
+                      <option value="Concluído">Concluído</option>
+                      <option value="Em andamento">Em andamento</option>
+                      <option value="Atenção">Atenção</option>
+                    </select>
+                  </div>
+                </div>
+                <div id="criteriaList" class="criteria-list"></div>
+              </section>
+            </div>
+
+            <section class="planning-panel">
+              <div class="planning-head">
+                <div>
+                  <p class="detail-eyebrow">DETALHAMENTO DO CRITÉRIO</p>
+                  <h3 id="planningTitle">Selecione um critério</h3>
+                </div>
+                <span id="planningStatus" class="planning-status">—</span>
+              </div>
+
+              <div class="planning-layout">
+                <div class="planning-main">
+                  <div class="planning-block">
+                    <span class="planning-label">Direcionamento do Campo</span>
+                    <p id="planningDescription">Clique em um critério para visualizar os detalhes.</p>
+                  </div>
+
+                  <div class="planning-block">
+                    <span class="planning-label">Pergunta para a Igreja Local</span>
+                    <p id="planningQuestion">—</p>
+                  </div>
+
+                  <div class="plan-textarea">
+                    <span class="planning-label">Plano de ação da igreja</span>
+                    <textarea id="planningAction" placeholder="Descreva aqui como a igreja realizará este requisito..."></textarea>
+                  </div>
+                </div>
+
+                <div class="planning-side">
+                  <div class="score-card">
+                    <span>Resultado</span>
+                    <strong id="planningPercent">0%</strong>
+                    <div class="score-track"><span id="planningProgress"></span></div>
+                  </div>
+
+                  <label>Meta<input id="planningGoal" type="number"></label>
+                  <label>Alcançado<input id="planningReached" type="number"></label>
+                  <label>Responsável<input id="planningResponsible"></label>
+                  <label>Data inicial<input id="planningDate" type="date"></label>
+                  <label>Nº do voto<input id="planningVote"></label>
+                  <label>Material necessário<input id="planningMaterial"></label>
+
+                  <button id="savePlanning" class="save-planning">Salvar planejamento</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <footer class="dashboard-footer">
+          <span>Planejar é essencial para o crescimento e êxito da missão.</span>
+          <span id="lastUpdate">Última atualização: —</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal" aria-hidden="true">
+    <div class="modal-panel">
+      <button id="closeModal" class="close-modal">×</button>
+      <div class="modal-accent" id="modalAccent"></div>
+      <p class="modal-kicker" id="modalArea"></p>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <div class="modal-grid">
+        <div><span>Meta</span><strong id="modalGoal"></strong></div>
+        <div><span>Alcançado</span><strong id="modalReached"></strong></div>
+        <div><span>Percentual</span><strong id="modalPercent"></strong></div>
+        <div><span>Situação</span><strong id="modalStatus"></strong></div>
+      </div>
+      <div class="modal-progress"><span id="modalProgress"></span></div>
+      <div class="modal-fields">
+        <label>Responsável<input id="modalResponsible" readonly></label>
+        <label>Data inicial<input id="modalDate" readonly></label>
+        <label>Nº do voto<input id="modalVote" readonly></label>
+        <label>Material necessário<input id="modalMaterial" readonly></label>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="settingsModal" class="modal" aria-hidden="true">
+    <div class="modal-panel settings-modal-panel">
+      <button id="closeSettings" class="close-modal">×</button>
+      <div class="modal-accent settings-accent"></div>
+      <p class="modal-kicker">BANCO DE DADOS</p>
+      <h2>Integração com Google Sheets</h2>
+      <p>Informe a URL do Web App criado no Google Apps Script. A URL ficará salva somente neste navegador.</p>
+
+      <label class="settings-url-label">
+        URL do Web App
+        <input id="appsScriptUrl" type="url" placeholder="https://script.google.com/macros/s/SEU_ID/exec">
+      </label>
+
+      <div class="settings-test-row">
+        <button id="saveEndpoint" class="save-planning">Salvar e testar conexão</button>
+        <button id="useLocalMode" class="back-overview local-button">Usar modo demonstração</button>
+      </div>
+
+      <div id="connectionResult" class="connection-result">Nenhuma conexão testada.</div>
+
+      <div class="settings-help">
+        <strong>Estrutura:</strong>
+        <span>Divisão Sul-Americana → União Norte Brasileira → Missão Oeste do Pará → Distrito Castelo de Sonhos → Igreja Local.</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
