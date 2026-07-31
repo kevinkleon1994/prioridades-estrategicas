@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102333">
+  <meta name="description" content="Sistema Enterprise das Prioridades Estratégicas">
+  <title>Prioridades Estratégicas Enterprise</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand"><div class="brand-symbol"><i class="b-red"></i><i class="b-blue"></i><i class="b-yellow"></i><i class="b-green"></i></div><div><strong>Prioridades Estratégicas</strong><span>DSA</span></div></div>
+      <p class="eyebrow">ACESSO AO SISTEMA</p>
+      <h1>Entre para continuar</h1>
+      <label><span>E-mail</span><input id="loginEmail" type="email" placeholder="seuemail@exemplo.com"></label>
+      <label><span>Código de acesso</span><input id="loginCode" type="password" placeholder="••••••"></label>
+      <button id="loginButton" class="primary">Entrar <span aria-hidden="true">→</span></button>
+      <small>Perfis: Pastor Distrital de Castelo de Sonhos e Administrador Master.</small>
+      <div id="loginMessage" class="inline-message"></div>
+    </div>
+  </section>
+
+  <div id="appRoot" class="app hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><div class="brand-symbol"><i class="b-red"></i><i class="b-blue"></i><i class="b-yellow"></i><i class="b-green"></i></div><div><strong>Prioridades</strong><span>Enterprise</span></div></div>
+      <nav>
+        <button class="nav-button active" data-view="dashboard">⌂ Dashboard</button>
+        <div class="nav-group">
+          <button id="prioritiesToggle" class="nav-button nav-toggle" type="button">◈ Prioridades <b>⌄</b></button>
+          <div id="prioritySubmenu" class="priority-submenu open">
+            <button type="button" data-priority="Identidade"><i class="sub-dot identity"></i>Identidade</button>
+            <button type="button" data-priority="Liderança"><i class="sub-dot leadership"></i>Liderança</button>
+            <button type="button" data-priority="Novas Gerações"><i class="sub-dot generations"></i>Novas Gerações</button>
+            <button type="button" data-priority="Discipulado"><i class="sub-dot discipleship"></i>Discipulado</button>
+          </div>
+        </div>
+        <button class="nav-button" data-view="planner">▦ Planner</button>
+        <button class="nav-button" data-view="timeline">◷ Linha do tempo</button>
+        <button class="nav-button" data-view="evidence">▣ Evidências</button>
+        <button class="nav-button" data-view="reports">▤ Relatórios</button>
+        <button class="nav-button admin-only" data-view="admin">⚙ Administração</button>
+      </nav>
+      <div class="profile-card">
+        <strong id="profileName">Usuário</strong>
+        <span id="profileRole">Perfil</span>
+        <button id="logoutButton">Sair</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="mobileMenu" class="mobile-menu">☰</button>
+        <div><p class="eyebrow">MISSÃO OESTE DO PARÁ · DISTRITO CASTELO DE SONHOS</p><h1 id="viewTitle">Dashboard Executivo</h1></div>
+        <div class="top-actions">
+          <span id="syncBadge" class="sync-badge"><i></i>Sincronizando</span>
+          <button id="presentationButton" class="icon-action" title="Modo apresentação">⛶</button>
+          <button id="installButton" class="install-action hidden" title="Baixar versão aplicativo"><span>⬇</span> Instalar aplicativo</button>
+          <button id="refreshButton" class="primary"><span id="refreshIcon">↻</span> Atualizar</button>
+        </div>
+      </header>
+
+      <section class="filterbar">
+        <label><span>Igreja</span><select id="churchFilter"></select></label>
+        <label><span>Ano</span><select id="yearFilter"><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option></select></label>
+        <label><span>Mês</span><select id="monthFilter"><option value="Todos">Ano completo</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></label>
+        <div class="filter-summary"><span>Contexto</span><strong id="contextText">Distrito completo · 2026</strong></div>
+      </section>
+
+      <section id="dashboardView" class="view active">
+        <div class="executive-hero">
+          <div><p class="eyebrow">VISÃO EXECUTIVA</p><h2>Desempenho das prioridades estratégicas</h2><p>Indicadores consolidados, evolução e ranking das igrejas.</p></div>
+          <div class="hero-kpis">
+            <div class="radial" id="overallRadial" style="--value:0"><div><strong id="overallPercent">0%</strong><span>resultado geral</span></div></div>
+            <div class="hero-stat"><span>Meta</span><strong id="overallGoal">0</strong><span>Realizado</span><strong id="overallReached">0</strong></div>
+          </div>
+        </div>
+        <div id="priorityCards" class="priority-grid"></div>
+        <div class="grid-2">
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">EVOLUÇÃO</p><h3>Evolução mensal</h3></div></div><canvas id="evolutionChart" width="800" height="280"></canvas></article>
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">RANKING</p><h3>Igrejas do distrito</h3></div></div><div id="rankingList" class="ranking-list"></div></article>
+        </div>
+        <div class="grid-2">
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">SEMÁFORO</p><h3>Situação por prioridade</h3></div></div><div id="trafficGrid" class="traffic-grid"></div></article>
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">ALERTAS</p><h3>Pendências prioritárias</h3></div></div><div id="alertsList" class="alerts-list"></div></article>
+        </div>
+      </section>
+
+
+      <section id="prioritiesView" class="view">
+        <div class="view-head">
+          <div><p class="eyebrow">PLANEJAMENTO ESTRATÉGICO</p><h2>Prioridades e critérios</h2></div>
+          <div class="priority-tabs" id="priorityTabs"></div>
+        </div>
+
+        <div class="priority-detail-grid">
+          <article class="panel criteria-panel-v51">
+            <div class="panel-head">
+              <div><p class="eyebrow">CRITÉRIOS</p><h3 id="priorityAreaTitle">Identidade</h3></div>
+              <select id="criteriaStatusFilter">
+                <option value="Todos">Todas as situações</option>
+                <option value="Concluído">Concluído</option>
+                <option value="Em andamento">Em andamento</option>
+                <option value="Atenção">Atenção</option>
+              </select>
+            </div>
+            <div id="criteriaListV51" class="criteria-list-v51"></div>
+          </article>
+
+          <article class="panel planning-panel-v51">
+            <div class="planning-header-v51">
+              <div>
+                <p class="eyebrow">DETALHAMENTO DO CRITÉRIO</p>
+                <h3 id="criterionTitleV51">Selecione um critério</h3>
+              </div>
+              <span id="criterionStatusV51" class="status-chip">—</span>
+            </div>
+
+            <div class="instruction-grid">
+              <div><span>Direcionamento do Campo</span><p id="criterionDescriptionV51">—</p></div>
+              <div><span>Pergunta para a Igreja Local</span><p id="criterionQuestionV51">—</p></div>
+            </div>
+
+            <label class="full-field">
+              <span>Plano de ação da igreja</span>
+              <textarea id="actionPlanV51" placeholder="Descreva as ações, etapas, responsáveis e estratégias..."></textarea>
+            </label>
+
+            <div class="form-grid">
+              <label><span>Meta</span><input id="goalInputV51" type="number" min="0"></label>
+              <label><span>Alcançado</span><input id="reachedInputV51" type="number" min="0"></label>
+              <label><span>Responsável</span><input id="responsibleInputV51"></label>
+              <label><span>Data inicial</span><input id="dateInputV51" type="date"></label>
+              <label><span>Nº do voto</span><input id="voteInputV51"></label>
+              <label><span>Material necessário</span><input id="materialInputV51"></label>
+            </div>
+
+            <div class="planning-footer">
+              <div class="live-result">
+                <span>Resultado</span><strong id="livePercentV51">0%</strong>
+                <div><i id="liveProgressV51"></i></div>
+              </div>
+              <button id="saveCriterionV51" class="save-button-v51">Salvar na planilha</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="plannerView" class="view">
+        <div class="view-head"><div><p class="eyebrow">MICROSOFT PLANNER STYLE</p><h2>Checklist do planejamento</h2></div><button id="newTaskButton" class="primary">+ Nova tarefa</button></div>
+        <div id="kanbanBoard" class="kanban"></div>
+      </section>
+
+      <section id="timelineView" class="view">
+        <div class="view-head"><div><p class="eyebrow">CRONOGRAMA</p><h2>Linha do tempo</h2></div></div>
+        <div id="timelineList" class="timeline-list"></div>
+      </section>
+
+      <section id="evidenceView" class="view">
+        <div class="view-head"><div><p class="eyebrow">EVIDÊNCIAS</p><h2>Fotos e documentos</h2></div></div>
+        <article class="panel evidence-form">
+          <label><span>Critério</span><select id="evidenceCriterion"></select></label>
+          <label><span>Descrição</span><input id="evidenceDescription"></label>
+          <label><span>Arquivo</span><input id="evidenceFile" type="file" accept="image/*,.pdf"></label>
+          <button id="uploadEvidence" class="primary">Enviar evidência</button>
+        </article>
+        <div id="evidenceGallery" class="evidence-gallery"></div>
+      </section>
+
+      <section id="reportsView" class="view">
+        <div class="view-head"><div><p class="eyebrow">RELATÓRIOS</p><h2>Exportação e compartilhamento</h2></div></div>
+        <div class="report-actions">
+          <button id="pdfButton" class="report-card">📄<strong>Exportar PDF</strong><span>Relatório executivo para impressão</span></button>
+          <button id="excelButton" class="report-card">📊<strong>Exportar Excel</strong><span>Baixar dados em CSV compatível</span></button>
+          <button id="whatsappButton" class="report-card">📲<strong>Compartilhar no WhatsApp</strong><span>Resumo da igreja selecionada</span></button>
+          <button id="emailButton" class="report-card">📧<strong>Enviar relatório por e-mail</strong><span>Envio pelo Apps Script</span></button>
+        </div>
+      </section>
+
+      <section id="adminView" class="view">
+        <div class="view-head">
+          <div><p class="eyebrow">ADMINISTRAÇÃO</p><h2>Usuários e permissões</h2></div>
+          <button id="newUserButton" class="primary">+ Novo usuário</button>
+        </div>
+
+        <article class="panel admin-users-panel">
+          <div class="admin-toolbar">
+            <input id="userSearch" type="search" placeholder="Pesquisar usuário...">
+            <span id="usersCount">0 usuários</span>
+          </div>
+
+          <div class="users-table-wrap">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Função</th>
+                  <th>Área de Atuação</th>
+                  <th>Login</th>
+                  <th>Senha</th>
+                  <th>Acesso</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <footer><span>Desenvolvido por Kevin Fernandes · © 2026 · Versão 6.0</span><span id="lastUpdate">Última atualização: —</span></footer>
+    </main>
+  </div>
+
+  <div id="taskModal" class="modal"><div class="modal-card"><button class="close" data-close="taskModal">×</button><h2>Nova tarefa</h2><label><span>Título</span><input id="taskTitle"></label><label><span>Responsável</span><input id="taskOwner"></label><label><span>Prazo</span><input id="taskDue" type="date"></label><label><span>Status</span><select id="taskStatus"><option>Não iniciado</option><option>Em andamento</option><option>Concluído</option></select></label><button id="saveTask" class="primary">Salvar tarefa</button></div></div>
+  <div id="emailModal" class="modal"><div class="modal-card"><button class="close" data-close="emailModal">×</button><h2>Enviar relatório</h2><label><span>E-mail</span><input id="reportEmail" type="email"></label><button id="sendEmail" class="primary">Enviar</button></div></div>
+
+  <div id="userModal" class="modal">
+    <div class="modal-card user-modal-card">
+      <button class="close" data-close="userModal">×</button>
+      <p class="eyebrow">USUÁRIO E PERMISSÃO</p>
+      <h2 id="userModalTitle">Novo usuário</h2>
+
+      <input id="editingUserId" type="hidden">
+
+      <div class="user-form-grid">
+        <label><span>Nome</span><input id="userNameInput"></label>
+
+        <label>
+          <span>Função</span>
+          <select id="userRoleInput">
+            <option>Pastor Distrital</option>
+            <option>Ancião/Secretária Local</option>
+            <option>Administrador da Missão</option>
+          </select>
+        </label>
+
+        <label><span>Área de Atuação</span><input id="userAreaInput" placeholder="Ex.: Castelo de Sonhos ou Central"></label>
+        <label><span>Login</span><input id="userLoginInput"></label>
+        <label><span>Senha</span><input id="userPasswordInput" type="text"></label>
+
+        <label>
+          <span>Acesso</span>
+          <select id="userActiveInput">
+            <option value="true">Ativo</option>
+            <option value="false">Inativo</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="user-modal-actions">
+        <button id="saveUserButton" class="primary">Salvar usuário</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
