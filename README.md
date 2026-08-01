@@ -1,30 +1,59 @@
-# Prioridades Estratégicas — V8.3
+# Prioridades Estratégicas — V8.4
 
-Desenvolvido por Kevin Fernandes · © 2026 · Versão 8.3
+Desenvolvido por Kevin Fernandes · © 2026 · Versão 8.4
 
-## Atualizações
+## Principais atualizações
 
-- Cadastro manual de membros frequentes, não frequentes, a transferir e a resgatar.
-- Ícones do Semáforo e Alertas com 25% de opacidade e 75% ao passar o mouse.
-- Evidências editáveis e mural estilo ladrilhos, preservando proporções retrato e paisagem.
-- Aba `Versiculos_Diarios` com data e texto bíblico em itálico.
-- Texto bíblico diário na Visão Executiva.
-- Fontes ampliadas em Prioridades, Semáforo, Alertas, Meta, Realizado e Ranking.
+- Total de membros no topo, seguido por Frequentes, Não frequentes, A transferir e A resgatar.
+- Layout móvel dos indicadores reorganizado em duas colunas, com Total ocupando a largura inteira.
+- Marca lateral alterada para:
+  - Prioridades
+  - Estratégicas | DSA
+- Clique na logomarca geométrica recolhe ou expande o menu lateral.
+- Ícones do Semáforo e dos Alertas com 75% de opacidade e 100% ao passar o mouse.
+- Botão **Atualizar Sistema** sincroniza títulos, direcionamentos, perguntas e metas a partir da planilha.
+- Alterações feitas diretamente na aba `Requisitos` passam a aparecer na Web após Atualizar Sistema.
+- Meta automática do requisito `ID-01 — Patriarcas e Profetas`: 60% dos membros frequentes da igreja.
+- Novo módulo **Requisitos** para edição e configuração.
+- Novo módulo **Minha Igreja** para quantidade de anciãos, famílias, pastor, telefone, endereço, e-mail e observações.
 
 ## Apps Script
 
-1. Substitua o `Code.gs` pelo conteúdo de `google-apps-script/Code_V8_3_COMPLETO.gs`.
-2. Crie um arquivo Script chamado `V8_3_Extensoes`.
-3. Cole o conteúdo de `google-apps-script/V8_3_Extensoes.gs`.
+Use:
+
+```text
+google-apps-script/Code_V8_4_COMPLETO.gs
+google-apps-script/V8_4_Extensoes.gs
+```
+
+### Atualização
+
+1. Substitua o conteúdo de `Code.gs` por `Code_V8_4_COMPLETO.gs`.
+2. Crie um arquivo Script chamado `V8_4_Extensoes`.
+3. Cole o conteúdo de `V8_4_Extensoes.gs`.
 4. Salve.
-5. Execute `configurarV83()` uma única vez.
-6. Autorize o acesso ao Google Sheets, Drive e envio de arquivos.
-7. Atualize a implantação em `Implantar > Gerenciar implantações > Editar > Nova versão > Implantar`.
+5. Execute `configurarV84()` uma única vez.
+6. Atualize a implantação:
+   `Implantar > Gerenciar implantações > Editar > Nova versão > Implantar`.
 
-A função preserva as quantidades anteriores, convertendo membros ativos em frequentes e a diferença entre total e ativos em não frequentes.
+## GitHub
 
-## GitHub Pages
+Substitua na raiz:
 
-Substitua: `index.html`, `styles.css`, `app.js`, `config.js`, `manifest.webmanifest`, `service-worker.js` e `assets/`.
+- index.html
+- styles.css
+- app.js
+- config.js
+- manifest.webmanifest
+- service-worker.js
+- assets/
 
-Depois do commit, pressione `Ctrl + Shift + R`. Se necessário, limpe o Service Worker em `F12 > Application`.
+Depois publique e use `Ctrl + Shift + R`.
+
+## Observação sobre o total de membros
+
+O total exibido é calculado como:
+
+```text
+Frequentes + Não frequentes + A transferir + A resgatar
+```
