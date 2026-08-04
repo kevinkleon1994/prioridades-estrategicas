@@ -265,7 +265,7 @@ function renderCriterionFormV51(){
   updateLiveV51();
   const disabled=selectedChurch==="Todas"||!canEditChurch(selectedChurch);
   ["actionPlanV51","goalInputV51","reachedInputV51","responsibleInputV51","dateInputV51","voteInputV51","materialInputV51","saveCriterionV51"].forEach(id=>$(id).disabled=disabled);
-  $("saveCriterionV51").textContent=disabled?"Selecione uma igreja para editar":"Salvar na planilha";
+  $("saveCriterionV51").textContent=disabled?"Selecione uma igreja para editar":"Salvar";
 }
 function normalizeDateV51(v){
   if(!v)return"";
