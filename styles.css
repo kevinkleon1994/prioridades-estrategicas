@@ -14,7 +14,7 @@
 .criterion-v51{border:1px solid var(--border);border-radius:12px;background:#f9fbfc;padding:11px;display:grid;grid-template-columns:28px 1fr auto;gap:9px;align-items:center;text-align:left}
 .criterion-v51:hover,.criterion-v51.active{border-color:var(--current);box-shadow:0 0 0 3px color-mix(in srgb,var(--current) 10%,transparent)}
 .criterion-v51 b{width:26px;height:26px;border-radius:8px;background:color-mix(in srgb,var(--current) 13%,white);color:var(--current);display:grid;place-items:center;font-size:9px}
-.criterion-v51 strong{display:block;font-size:11px}.criterion-v51 small{display:block;color:var(--muted);font-size:9px;margin-top:3px}.criterion-v51 em{font-style:normal;font-weight:800;color:var(--current);font-size:12px}
+.criterion-v51 strong{display:block;font-size:13px}.criterion-v51 small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.criterion-v51 em{font-style:normal;font-weight:800;color:var(--current);font-size:12px}
 .planning-header-v51{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px}
 .planning-header-v51 h3{margin:5px 0 0;font-size:20px}
 .save-button-v51{border:0;border-radius:11px;background:var(--current);color:#fff;height:43px;padding:0 18px;font-weight:800}
