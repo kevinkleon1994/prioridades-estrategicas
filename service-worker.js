@@ -1,4 +1,4 @@
-const CACHE = "prioridades-v8-5-3";
+const CACHE = "prioridades-v1";
 
 const ASSETS = [
   "./",
