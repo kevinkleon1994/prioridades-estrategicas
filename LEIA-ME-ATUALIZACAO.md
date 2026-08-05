@@ -1,44 +1,34 @@
-# CORREÇÃO V8.5.1 — TIMEOUT DO RELATÓRIO COM IA
+CORREÇÃO PWA WINDOWS — V8.5.3
 
-## Arquivos do GitHub a substituir
-
-Copie para a raiz do repositório:
-
-- app.js
-- config.js
+ARQUIVOS PARA SUBSTITUIR NA RAIZ DO GITHUB:
 - index.html
+- manifest.webmanifest
 - service-worker.js
 
-## Arquivo do Apps Script a substituir
+ARQUIVOS QUE DEVEM EXISTIR NA PASTA assets:
+- assets/icone_192.png
+- assets/icone_512.png
 
-Substitua o conteúdo do arquivo:
+IMPORTANTE:
+O manifesto anterior citava:
+- icone_192_maskable.png
+- icone_512_maskable.png
 
-- V8_5_IA_Relatorios.gs
+Esses arquivos não aparecem na pasta assets do print enviado. Por isso, as referências foram removidas. Um manifesto que aponta para ícones inexistentes pode impedir o navegador de reconhecer corretamente a instalação ou fazer o Windows usar um ícone incorreto.
 
-pelo arquivo localizado em:
-
-- google-apps-script/V8_5_IA_Relatorios.gs
-
-## Depois da substituição no Apps Script
-
-1. Salve o projeto.
-2. Não é necessário executar configurarV85 novamente.
-3. Vá em:
-   Implantar > Gerenciar implantações > Editar > Nova versão > Implantar.
-
-## Depois da substituição no GitHub
-
-1. Faça o commit.
-2. Aguarde o GitHub Pages publicar.
-3. Pressione Ctrl + Shift + R.
-4. Se ainda carregar a versão anterior:
+PASSO A PASSO:
+1. Substitua os três arquivos na raiz do repositório.
+2. Confirme que icone_192.png tem exatamente 192x192 px.
+3. Confirme que icone_512.png tem exatamente 512x512 px.
+4. Faça o commit.
+5. Aguarde a publicação do GitHub Pages.
+6. Desinstale completamente o aplicativo antigo no Windows.
+7. No navegador:
    F12 > Application > Storage > Clear site data.
-5. Em Service Workers, clique em Unregister.
+8. Em:
+   Application > Service Workers > Unregister.
+9. Feche o navegador.
+10. Abra novamente o site e instale o aplicativo.
 
-## Correções aplicadas
-
-- Tempo de espera exclusivo da IA ampliado de 25 segundos para 3 minutos.
-- Mensagens de progresso durante a análise.
-- Limite do relatório reduzido de 7000 para 3500 tokens para melhorar a velocidade.
-- Cache atualizado para prioridades-v8-5-1.
-- Versão visível atualizada para 8.5.1.
+OBSERVAÇÃO SOBRE ENQUADRAMENTO:
+Se a logomarca continuar pequena no Menu Iniciar, o problema estará no conteúdo interno dos PNGs. A arte deve ocupar aproximadamente 75% a 85% da tela quadrada, com margens uniformes.
