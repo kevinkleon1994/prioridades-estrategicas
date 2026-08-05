@@ -11,7 +11,7 @@
   ],
   "background_color": "#eef5f6",
   "theme_color": "#102333",
-  "description": "Sistema Enterprise das Prioridades Estratégicas",
+  "description": "Sistema de planejamento estratégico para igrejas adventistas.",
   "icons": [
     {
       "src": "./assets/icone_192.png",
@@ -25,5 +25,6 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "version": "1.0.0"
 }
