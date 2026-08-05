@@ -1,0 +1,34 @@
+ATUALIZAÇÃO V8.5.5 — BOTÃO INSTALAR EM DESKTOP, ANDROID E iOS
+
+ARQUIVOS PARA SUBSTITUIR NA RAIZ DO GITHUB:
+- index.html
+- styles.css
+- app.js
+- service-worker.js
+
+COMPORTAMENTO:
+- Desktop Chrome/Edge: abre a confirmação automática quando disponível.
+- Android Chrome: abre a confirmação automática quando disponível.
+- Android sem prompt disponível: mostra o passo a passo.
+- iPhone/iPad: mostra as instruções para usar Safari > Compartilhar > Adicionar à Tela de Início.
+- Aplicativo já instalado: informa que o aplicativo já está instalado.
+- O botão permanece visível em todas as plataformas.
+
+ATENÇÃO:
+No iOS não existe o evento automático beforeinstallprompt. Por isso, o botão exibe as instruções oficiais de instalação pelo Safari.
+
+PASSO A PASSO:
+1. Substitua os quatro arquivos na raiz do repositório.
+2. Faça o commit.
+3. Aguarde o GitHub Pages publicar.
+4. Pressione Ctrl + Shift + R.
+5. Se ainda aparecer a versão anterior:
+   F12 > Application > Storage > Clear site data.
+6. Em Service Workers, clique em Unregister.
+7. Reabra a página.
+
+CACHE:
+prioridades-v1
+
+SUBSTITUIÇÕES AUTOMÁTICAS REALIZADAS NO app.js:
+1 ocorrência(s) da lógica antiga de instalação.

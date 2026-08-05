@@ -1,0 +1,6 @@
+Copyright (c) 2026 Kevin Fernandes
+
+Todos os direitos reservados.
+
+Este software foi desenvolvido para uso institucional no projeto Prioridades Estratégicas | DSA.
+A reprodução, redistribuição, comercialização ou modificação pública exige autorização expressa do autor.

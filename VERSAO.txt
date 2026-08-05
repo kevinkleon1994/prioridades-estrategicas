@@ -1,0 +1,6 @@
+PRIORIDADES ESTRATÉGICAS | DSA
+VERSÃO OFICIAL 1.0.0
+BUILD: prioridades-v1
+
+Esta é a primeira versão oficial pública do sistema.
+As numerações V8.x correspondem ao histórico interno de desenvolvimento.
