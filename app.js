@@ -265,7 +265,7 @@ function renderCriterionFormV51(){
   updateLiveV51();
   const disabled=selectedChurch==="Todas"||!canEditChurch(selectedChurch);
   ["actionPlanV51","goalInputV51","reachedInputV51","responsibleInputV51","dateInputV51","voteInputV51","materialInputV51","saveCriterionV51"].forEach(id=>$(id).disabled=disabled);
-  $("saveCriterionV51").textContent=disabled?"Selecione uma igreja para editar":"Salvar";
+  $("saveCriterionV51").textContent=disabled?"Selecione uma igreja para editar":"Salvar na planilha";
 }
 function normalizeDateV51(v){
   if(!v)return"";
@@ -658,11 +658,150 @@ function shareAiReportV85(){
   window.open(target+encodeURIComponent(text),"_blank");
 }
 
+
+function aplicativoEstaInstalado(){
+  return window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+}
+
+function dispositivoIOS(){
+  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+}
+
+function dispositivoAndroid(){
+  return /android/i.test(window.navigator.userAgent);
+}
+
+function abrirAjudaInstalacao(tipo="generico"){
+  const modal=$("installHelpModal");
+  const title=$("installHelpTitle");
+  const content=$("installHelpContent");
+  if(!modal||!content)return;
+
+  if(tipo==="ios"){
+    title.textContent="Instalar no iPhone ou iPad";
+    content.innerHTML=`
+      <div class="install-help-step"><strong>1</strong><span>Abra esta página no <b>Safari</b>.</span></div>
+      <div class="install-help-step"><strong>2</strong><span>Toque no botão <b>Compartilhar</b> — o quadrado com uma seta para cima.</span></div>
+      <div class="install-help-step"><strong>3</strong><span>Escolha <b>Adicionar à Tela de Início</b>.</span></div>
+      <div class="install-help-step"><strong>4</strong><span>Confirme em <b>Adicionar</b>.</span></div>
+      <div class="install-help-note">No iOS, o navegador não exibe a janela automática de instalação. A instalação é feita pelo menu Compartilhar do Safari.</div>`;
+  }else if(tipo==="android"){
+    title.textContent="Instalar no Android";
+    content.innerHTML=`
+      <div class="install-help-step"><strong>1</strong><span>Abra a página no <b>Google Chrome</b>.</span></div>
+      <div class="install-help-step"><strong>2</strong><span>Toque no menu de três pontos.</span></div>
+      <div class="install-help-step"><strong>3</strong><span>Escolha <b>Instalar aplicativo</b> ou <b>Adicionar à tela inicial</b>.</span></div>
+      <div class="install-help-note">Quando o Chrome disponibilizar a instalação automática, este mesmo botão abrirá a confirmação diretamente.</div>`;
+  }else{
+    title.textContent="Instalar no computador";
+    content.innerHTML=`
+      <div class="install-help-step"><strong>1</strong><span>Abra esta página no <b>Chrome</b> ou <b>Microsoft Edge</b>.</span></div>
+      <div class="install-help-step"><strong>2</strong><span>Use o ícone de instalação na barra de endereço ou abra o menu do navegador.</span></div>
+      <div class="install-help-step"><strong>3</strong><span>Escolha <b>Instalar Prioridades Estratégicas</b>.</span></div>
+      <div class="install-help-note">Se a instalação já tiver sido realizada, procure o aplicativo no Menu Iniciar ou na lista de aplicativos.</div>`;
+  }
+
+  modal.classList.add("open");
+}
+
+async function executarInstalacaoPWA(){
+  const botao=$("installButton");
+  if(aplicativoEstaInstalado()){
+    toast("O aplicativo já está instalado neste dispositivo.");
+    return;
+  }
+
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const escolha=await deferredPrompt.userChoice;
+    if(escolha?.outcome==="accepted"){
+      toast("Instalação iniciada.");
+    }
+    deferredPrompt=null;
+    return;
+  }
+
+  if(dispositivoIOS()){
+    abrirAjudaInstalacao("ios");
+  }else if(dispositivoAndroid()){
+    abrirAjudaInstalacao("android");
+  }else{
+    abrirAjudaInstalacao("desktop");
+  }
+
+  if(botao)botao.blur();
+}
+
+function atualizarEstadoBotaoInstalacao(){
+  const botao=$("installButton");
+  if(!botao)return;
+
+  botao.classList.remove("hidden");
+  const instalado=aplicativoEstaInstalado();
+  botao.classList.toggle("pwa-installed",instalado);
+  botao.title=instalado?"Aplicativo instalado":"Instalar aplicativo";
+  botao.setAttribute("aria-label",instalado?"Aplicativo instalado":"Instalar aplicativo");
+}
+
+function configurarInstalacaoPWA(){
+  const botao=$("installButton");
+  if(!botao||botao.dataset.pwaBound==="1")return;
+  botao.dataset.pwaBound="1";
+
+  atualizarEstadoBotaoInstalacao();
+  botao.addEventListener("click",executarInstalacaoPWA);
+
+  window.addEventListener("beforeinstallprompt",event=>{
+    event.preventDefault();
+    deferredPrompt=event;
+    atualizarEstadoBotaoInstalacao();
+  });
+
+  window.addEventListener("appinstalled",()=>{
+    deferredPrompt=null;
+    atualizarEstadoBotaoInstalacao();
+    toast("Aplicativo instalado com sucesso.");
+  });
+
+  const fechar=$("closeInstallHelpButton");
+  if(fechar){
+    fechar.addEventListener("click",()=>{
+      $("installHelpModal")?.classList.remove("open");
+    });
+  }
+}
+
 async function sendEmail(){const email=$("reportEmail").value.trim();if(!email)return;const body=new URLSearchParams({action:"sendReport",email,igreja:selectedChurch,ano:selectedYear});await fetch(endpoint(),{method:"POST",mode:"no-cors",body});toast("Solicitação de envio realizada.");$("emailModal").classList.remove("open")}
-document.addEventListener("DOMContentLoaded",()=>{const saved=localStorage.getItem("sessionUser");if(saved){user=JSON.parse(saved);startApp()}$("loginButton").onclick=login;["loginEmail","loginCode"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();login()}}));$("logoutButton").onclick=logout;document.querySelectorAll(".nav-button[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));$("prioritiesToggle").onclick=()=>$("prioritySubmenu").classList.toggle("open");document.querySelectorAll("[data-priority]").forEach(b=>b.onclick=()=>openPriorityV6(b.dataset.priority));$("churchFilter").onchange=e=>{selectedChurch=e.target.value;renderAll()};$("yearFilter").onchange=e=>{selectedYear=e.target.value;renderAll()};$("monthFilter").onchange=e=>{selectedMonth=e.target.value;renderAll()};$("refreshButton").onclick=AtualizarSistema;$("mobileMenu").onclick=()=>$("sidebar").classList.toggle("open");$("sidebarLogoButton").onclick=()=>{document.body.classList.toggle("sidebar-collapsed");localStorage.setItem("sidebarCollapsed",document.body.classList.contains("sidebar-collapsed")?"1":"0")};if(localStorage.getItem("sidebarCollapsed")==="1")document.body.classList.add("sidebar-collapsed");$("presentationButton").onclick=()=>document.documentElement.requestFullscreen?.();$("newTaskButton").onclick=()=>openTaskModal();$("saveTask").onclick=saveTaskItem;$("deleteTask").onclick=deleteTaskItem;$("criteriaStatusFilter").onchange=e=>{criteriaStatus=e.target.value;renderPriorities()};document.querySelectorAll("[data-member-edit]").forEach(b=>b.onclick=openMembersModal);["membersFrequentInput","membersInfrequentInput","membersTransferInput","membersRescueInput"].forEach(id=>$(id).oninput=updateMembersTotal);$("saveMembersButton").onclick=saveMemberStats;
+
+async function alternarModoApresentacao(){
+  const botao=$("presentationButton");
+  try{
+    if(!document.fullscreenElement){
+      await document.documentElement.requestFullscreen();
+    }else{
+      await document.exitFullscreen();
+    }
+  }catch(error){
+    console.error("Erro ao alternar modo apresentação:",error);
+    toast("Não foi possível alternar o modo apresentação.");
+  }
+}
+function atualizarBotaoApresentacao(){
+  const botao=$("presentationButton");
+  if(!botao)return;
+  const telaCheia=Boolean(document.fullscreenElement);
+  botao.classList.toggle("fullscreen-active",telaCheia);
+  botao.title=telaCheia?"Sair da tela cheia":"Modo apresentação";
+  botao.setAttribute("aria-label",telaCheia?"Sair da tela cheia":"Entrar em tela cheia");
+  botao.textContent=telaCheia?"⤢":"⛶";
+}
+document.addEventListener("fullscreenchange",atualizarBotaoApresentacao);
+
+document.addEventListener("DOMContentLoaded",()=>{const saved=localStorage.getItem("sessionUser");if(saved){user=JSON.parse(saved);startApp()}$("loginButton").onclick=login;["loginEmail","loginCode"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();login()}}));$("logoutButton").onclick=logout;document.querySelectorAll(".nav-button[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));$("prioritiesToggle").onclick=()=>$("prioritySubmenu").classList.toggle("open");document.querySelectorAll("[data-priority]").forEach(b=>b.onclick=()=>openPriorityV6(b.dataset.priority));$("churchFilter").onchange=e=>{selectedChurch=e.target.value;renderAll()};$("yearFilter").onchange=e=>{selectedYear=e.target.value;renderAll()};$("monthFilter").onchange=e=>{selectedMonth=e.target.value;renderAll()};$("refreshButton").onclick=AtualizarSistema;$("mobileMenu").onclick=()=>$("sidebar").classList.toggle("open");$("sidebarLogoButton").onclick=()=>{document.body.classList.toggle("sidebar-collapsed");localStorage.setItem("sidebarCollapsed",document.body.classList.contains("sidebar-collapsed")?"1":"0")};if(localStorage.getItem("sidebarCollapsed")==="1")document.body.classList.add("sidebar-collapsed");$("presentationButton").onclick=alternarModoApresentacao;atualizarBotaoApresentacao();$("newTaskButton").onclick=()=>openTaskModal();$("saveTask").onclick=saveTaskItem;$("deleteTask").onclick=deleteTaskItem;$("criteriaStatusFilter").onchange=e=>{criteriaStatus=e.target.value;renderPriorities()};document.querySelectorAll("[data-member-edit]").forEach(b=>b.onclick=openMembersModal);["membersFrequentInput","membersInfrequentInput","membersTransferInput","membersRescueInput"].forEach(id=>$(id).oninput=updateMembersTotal);$("saveMembersButton").onclick=saveMemberStats;
   ["goalInputV51","reachedInputV51"].forEach(id=>$(id).oninput=updateLiveV51);
   $("saveCriterionV51").onclick=saveCriterionV51;
   $("newUserButton").onclick=()=>openUserModalV52();
   $("saveUserButton").onclick=saveUserV52;
   $("userSearch").oninput=renderUsersTableV52;$("newRequirementButton").onclick=()=>openRequirementModal();$("saveRequirementButton").onclick=saveRequirementV84;$("requirementSearch").oninput=renderRequirements;$("saveChurchProfileButton").onclick=saveChurchProfileV84;
-  $("toggleEvidenceEdit").onclick=()=>{evidenceEditMode=!evidenceEditMode;renderEvidence()};$("saveEvidenceButton").onclick=saveEvidenceEdit;$("deleteEvidenceButton").onclick=deleteEvidence;$("uploadEvidence").onclick=uploadEvidence;$("aiReportButton").onclick=generateAiReportV85;$("printAiReportButton").onclick=printAiReportV85;$("shareAiReportButton").onclick=shareAiReportV85;$("pdfButton").onclick=()=>window.print();$("excelButton").onclick=exportCSV;$("whatsappButton").onclick=shareWhatsApp;$("emailButton").onclick=()=>$("emailModal").classList.add("open");$("sendEmail").onclick=sendEmail;document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>$(b.dataset.close).classList.remove("open"));window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;$("installButton").classList.remove("hidden")});$("installButton").onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null}};if("serviceWorker"in navigator)navigator.serviceWorker.register("service-worker.js")})
+  $("toggleEvidenceEdit").onclick=()=>{evidenceEditMode=!evidenceEditMode;renderEvidence()};$("saveEvidenceButton").onclick=saveEvidenceEdit;$("deleteEvidenceButton").onclick=deleteEvidence;$("uploadEvidence").onclick=uploadEvidence;$("aiReportButton").onclick=generateAiReportV85;$("printAiReportButton").onclick=printAiReportV85;$("shareAiReportButton").onclick=shareAiReportV85;$("pdfButton").onclick=()=>window.print();$("excelButton").onclick=exportCSV;$("whatsappButton").onclick=shareWhatsApp;$("emailButton").onclick=()=>$("emailModal").classList.add("open");$("sendEmail").onclick=sendEmail;document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>$(b.dataset.close).classList.remove("open"));configurarInstalacaoPWA();if("serviceWorker"in navigator)navigator.serviceWorker.register("./service-worker.js",{scope:"./"})})
